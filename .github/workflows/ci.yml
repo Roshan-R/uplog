@@ -23,7 +23,7 @@ jobs:
         working-directory: backend
         run: |
           pip install uv
-          uv pip sync pyproject.toml --system
+          uv sync --dev
 
       - name: Setup Go
         uses: actions/setup-go@v4

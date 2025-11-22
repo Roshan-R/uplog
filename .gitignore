@@ -6,6 +6,7 @@
 *.swp
 *.swo
 .DS_Store
+.ruff_cache
 Thumbs.db
 
 # Environment variables
