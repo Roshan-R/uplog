@@ -21,7 +21,9 @@ jobs:
 
       - name: Install Python deps
         working-directory: backend
-        run: uv pip sync --system
+        run: |
+          pip install uv
+          uv pip sync --system
 
       - name: Setup Go
         uses: actions/setup-go@v4
