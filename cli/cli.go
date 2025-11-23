@@ -40,6 +40,7 @@ var db *sql.DB
 var pollInterval = 200 * time.Millisecond
 var respJSON SessionCreateResponse
 
+
 type Session struct {
 	SessionID  string
 	CreatedAt  time.Time
@@ -159,6 +160,7 @@ func initDB(home string) {
 func runCmd(home, command string, args []string) {
 	// 1. Get session ID from backend (or local generation if backend not available)
 	sessionID, err := requestSessionIDFromBackend()
+	doneWriting := make(chan struct{})
 	if err != nil {
 		// fallback to local uuid but still continue
 		fmt.Printf("warning: backend session request failed: %v. Using local UUID.\n", err)
@@ -193,7 +195,7 @@ func runCmd(home, command string, args []string) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		err := uploaderLoop(ctx, tmpFile, sessionID)
+		err := uploaderLoop(ctx, tmpFile, sessionID,doneWriting)
 		if err != nil {
 			fmt.Printf("uploader error: %v\n", err)
 		}
@@ -227,6 +229,8 @@ func runCmd(home, command string, args []string) {
 	go func() {
 		defer wg.Done()
 		copyStreamsToFile(stdoutPipe, stderrPipe, f, sessionID)
+		close(doneWriting)
+		// make sure that doneWriting channel is closed, since it would upload the remaining content to the server from .log files
 	}()
 
 	// wait for command to finish
@@ -338,28 +342,35 @@ func copyStreamsToFile(stdout io.ReadCloser, stderr io.ReadCloser, outFile *os.F
 }
 
 
-// uploaderLoop tails the file and uploads new bytes in chunks
-func uploaderLoop(ctx context.Context, path string, sessionID string) error {
-	// maintain a read offset
+func uploaderLoop(ctx context.Context, path string, sessionID string, doneWriting <-chan struct{}) error {
 	var offset int64 = 0
 	ticker := time.NewTicker(pollInterval)
 	defer ticker.Stop()
+
 	for {
 		select {
-		case <-ctx.Done():
-			// final drain before exit
+		// uploader should stop only when writer has completely finished writing logs
+		case <-doneWriting:
+			// final drain
 			if err := uploadNewChunks(path, &offset, sessionID); err != nil {
 				return err
 			}
 			return nil
+
+		// regular timed uploads
 		case <-ticker.C:
 			if err := uploadNewChunks(path, &offset, sessionID); err != nil {
-				// keep going on transient errors; log and continue
 				fmt.Printf("upload error (will retry): %v\n", err)
 			}
+
+		// context cancel should NOT stop uploader
+		// it only stops polling but uploader continues until doneWriting closes
+		case <-ctx.Done():
+			// do nothing — wait for doneWriting
 		}
 	}
 }
+
 
 func uploadNewChunks(path string, offset *int64, sessionID string) error {
 	f, err := os.Open(path)
@@ -419,7 +430,6 @@ func uploadNewChunks(path string, offset *int64, sessionID string) error {
 // sendBatch sends a chunk to the backend
 func sendBatch(sessionID string, batch []LogEntry) error {
 	body, _ := json.Marshal(batch)
-	fmt.Println(batch)
 	req, err := http.NewRequest("POST",
 		backendUploadEndpoint+"?session_id="+sessionID,
 		bytes.NewReader(body))
