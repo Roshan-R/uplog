@@ -2,7 +2,6 @@ package tail
 
 import (
 	"bufio"
-	"cli/api"
 	"cli/models"
 	"cli/tail/utils"
 	"fmt"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"time"
 	"sync"
+	"cli/api"
+
 )
 
 var batchedLogs []models.LogEntry

@@ -112,25 +112,35 @@ func createSession(client *http.Client, apiKey string, userId string) (string, e
 }
 
 // SendConfig returns (apiKey, userID, error)
-func SetupSession() (string, error) {
+func SetupSession() (string,string,string, error) {
 	var err error
 	client := &http.Client{Timeout: 3 * time.Second}
-
-	apiKey := os.Getenv("UPLOG_API_KEY")
-	userId := os.Getenv("UPLOG_USER_ID")
+	fileBytes, err := os.ReadFile(constants.CredentialsFile)
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+	var config models.Configurations
+	config_err:=json.Unmarshal(fileBytes,&config)
+	if config_err!=nil{
+		fmt.Println("Could not parse configuration file")
+	}
+	apiKey := config.ApiKey
+	userId := config.UserId
 
 	if userId == "" {
 		var err error
-		userId, err = getUserId(client)
-		os.Setenv("UPLOG_USER_ID",userId)
+		userId, _ = getUserId(client)
+		config.UserId = userId
+		configBytes,err :=json.Marshal(config)
 		if err != nil {
-			return "", err
+			return "","","", err
 		}
+		os.WriteFile(constants.CredentialsFile,configBytes,0o700)
 	}
 	sessionId, err := createSession(client, apiKey, userId)
 	if err != nil {
-		return "", err
+		return "","","", err
 	}
 
-	return sessionId, nil
+	return apiKey,userId,sessionId, nil
 }

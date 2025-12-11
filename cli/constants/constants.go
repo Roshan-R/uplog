@@ -1,6 +1,8 @@
 package constants
 
-import "os"
+import ("os"
+"path/filepath"
+)
 
 func userHomeDir() string {
 	if h := os.Getenv("HOME"); h != "" {
@@ -13,9 +15,10 @@ func userHomeDir() string {
 var HomeDir string = userHomeDir()
 
 const (
-	BaseDir                      = ".uplog"
-	ConfigDir                    = "config"
-	TmpDir                       = "tmp"
+	base                         = ".uplog"
+	config                       = "config"
+	tmpDir                       = "tmp"
+	credentialsFileName          = "credentials.json"
 	SqliteFileName               = "db.sqlite"
 	Domain                       = "https://logs.uplog.com"
 	LogsDomain                   = Domain + "/session="
@@ -27,3 +30,8 @@ const (
 	BatchLimit                   = 200
 	PollIntervalLimit            = 100
 )
+
+var BaseDir = filepath.Join(HomeDir,base)
+var ConfigDir = filepath.Join(BaseDir,config)
+var CredentialsFile = filepath.Join(ConfigDir,credentialsFileName)
+var TmpDir = filepath.Join(BaseDir,tmpDir)
