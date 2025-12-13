@@ -20,14 +20,14 @@ const (
 	tmpDir                       = "tmp"
 	credentialsFileName          = "credentials.json"
 	SqliteFileName               = "db.sqlite"
-	Domain                       = "https://logs.uplog.com"
+	Domain                       = "http://localhost:9000/stream_ui.html"
 	LogsDomain                   = Domain + "/session="
 	BackendDomain                = "http://127.0.0.1:8000"
 	BackendUploadEndpoint        = BackendDomain + "/session/upload"
 	BackendUserCreateEndpoint	 = BackendDomain + "/user/create"
 	BackendSessionCreateEndpoint = BackendDomain + "/session/create"
 	ChunkSize                    = 32 * 1024 // 32 KB
-	BatchLimit                   = 200
+	BatchLimit                   = 1
 	PollIntervalLimit            = 100
 )
 
