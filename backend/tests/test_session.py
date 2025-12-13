@@ -1,6 +1,11 @@
 # import uuid
 
 
+def test_sample():
+    c = 4 // 2
+    assert c == 2
+
+
 # def test_session_create(session_id):
 #     # If the fixture didn't raise, the test passes
 #     #TODO complete this
