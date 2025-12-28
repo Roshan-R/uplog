@@ -105,7 +105,7 @@ export default function Documentation() {
                 </p>
                 <CodeBlock
                   language="bash"
-                  code={`$ uplog run python main.py`}
+                  code={`$ uplog python main.py`}
                 />
               </div>
             </div>
@@ -339,7 +339,7 @@ eventSource.onerror = (error) => {
       {/* Footer */}
       <footer className="border-t border-border/50 py-8">
         <div className="max-w-4xl mx-auto px-6 text-center text-muted-foreground text-sm">
-          © 2024 Live Logs. Built for developers.
+          Built with ❤️ from Kerala, India
         </div>
       </footer>
     </div>

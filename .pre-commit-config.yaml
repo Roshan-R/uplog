@@ -7,7 +7,7 @@ repos:
     hooks:
       - id: check-yaml
       - id: check-added-large-files
-        exclude: ^cli/binary/uplog$
+        exclude: ^(cli/binary/uplog|docs/.*\.png)$
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
