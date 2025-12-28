@@ -8,7 +8,7 @@ const Index = () => {
 
   const handleCreateStream = () => {
     const streamId = `stream_${Date.now().toString(36)}_${Math.random().toString(36).substr(2, 9)}`;
-    navigate(`/logs/${streamId}`);
+    navigate(`/demo-logs/${streamId}`);
   };
 
   return (
@@ -56,14 +56,12 @@ const Index = () => {
             {/* Main heading */}
             <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight mb-8 animate-slide-up">
               Debug faster with{' '}
-              <span className="text-primary neon-text">Live Logs</span>
+              <span className="text-primary neon-text">Uplog</span>
             </h1>
 
             {/* Description */}
             <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
-              Anonymous log monitoring that works in milli-seconds.
-              No signup, no dependencies, and no code rewrites -
-              just plug in the CLI and watch your logs stream live.
+              Free, open-source CLI log monitoring with live streaming — no signup, no dependencies, no code changes.
             </p>
 
             {/* CTAs */}
@@ -102,7 +100,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="p-4 font-mono text-sm space-y-2">
-                $ uplog run python main.py
+                $ uplog python main.py
                 </div>
               </div>
               </div>
@@ -120,7 +118,7 @@ const Index = () => {
                   <div className="w-3 h-3 rounded-full bg-primary/60" />
                 </div>
                 <div className="flex-1 text-center">
-                  <span className="text-xs font-mono text-muted-foreground">logstream.app/logs/stream_abc123</span>
+                  <span className="text-xs font-mono text-muted-foreground">uplog.live/live-logs/stream_abc123</span>
                 </div>
               </div>
               {/* Mock log content */}
@@ -235,7 +233,7 @@ const Index = () => {
               <span className="text-sm font-medium">Uplog</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Built for developers who need fast, simple log monitoring.
+              Built with ❤️ from Kerala, India
             </p>
           </div>
         </div>

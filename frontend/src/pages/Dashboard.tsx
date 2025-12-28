@@ -68,7 +68,7 @@ export default function Dashboard() {
                   <Terminal className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="font-semibold">LogStream</span>
+                  <span className="font-semibold">Uplog</span>
                   <p className="text-xs text-muted-foreground font-mono">{streamId}</p>
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function Dashboard() {
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
-              <span>Endpoint: <code className="text-foreground/70 bg-muted px-1.5 py-0.5 rounded">POST /api/logs/{streamId}</code></span>
+              <span>Endpoint: <code className="text-foreground/70 bg-muted px-1.5 py-0.5 rounded">POST /api/demo-logs/{streamId}</code></span>
             </div>
             <div>
               <span>Format: <code className="text-foreground/70 bg-muted px-1.5 py-0.5 rounded">{'{ message, timestamp, log_level }'}</code></span>

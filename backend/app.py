@@ -16,6 +16,7 @@ import nats
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import json
+from starlette.responses import JSONResponse
 
 
 @asynccontextmanager
@@ -68,10 +69,15 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
         await session.close()  # Ensure session is closed
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    docs_url=None,  # Disable Swagger UI
+    redoc_url=None,  # Disable ReDoc
+    openapi_url=None,  # Disable OpenAPI schema
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],
+    allow_origins=["https://www.uplog.live"],
     allow_credentials=True,
     allow_methods=["*"],  # Allows all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allows all headers
@@ -146,3 +152,8 @@ async def consume_session(
     session_id: str,
 ):
     return StreamingResponse(subject_consumer(session_id), media_type="text/event-stream")
+
+
+@app.get("/boi", tags=["Health"])
+async def health(request: Request):
+    return JSONResponse(content={"message": "Yes, boy!"})

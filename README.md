@@ -1,4 +1,15 @@
-## Uplog
+> This repository is in active development, hence change in documentation is expected
+
+<h1 style="display: flex; align-items: center; gap: 8px;">
+  <img
+    src="docs/uplog_icon.png"
+    alt="Uplog icon"
+    height="36"
+  />
+  Uplog
+</h1>
+
+
 
 [![CI](https://github.com/SOORAJTS2001/uplog/actions/workflows/ci.yml/badge.svg)](
 https://github.com/SOORAJTS2001/uplog/actions/workflows/ci.yml
@@ -34,5 +45,3 @@ uplog python main.py
 ```
 
 These logs are intermediately written to temporary log files, which would be deleted after successful log update
-
-> This repository is in active development, hence change in documentation is expected
